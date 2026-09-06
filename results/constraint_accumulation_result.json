@@ -1,0 +1,36 @@
+{
+  "status": "COMPLETE",
+  "chosen_n_splits": 5,
+  "seed": 1,
+  "B": 5,
+  "h_hat": {
+    "M0": 1.0,
+    "M1": 1.0,
+    "M2": 1.0110538724927354,
+    "M3": 1.0111467405020504,
+    "M4": 1.0131090643634932
+  },
+  "delta_h": {
+    "M1": 0.0,
+    "M2": -0.011053872492735373,
+    "M3": -9.286800931507244e-05,
+    "M4": -0.001962323861442794
+  },
+  "raw_p": {
+    "M2": 0.3333333333333333,
+    "M3": 0.16666666666666666,
+    "M4": 1.0
+  },
+  "holm_adjusted_p": {
+    "M2": 0.6666666666666666,
+    "M3": 0.5,
+    "M4": 1.0
+  },
+  "step_verdicts": {
+    "M2": "NOT SUPPORTED",
+    "M3": "NOT SUPPORTED",
+    "M4": "NOT SUPPORTED"
+  },
+  "broad_program_update": "NEGATIVE UPDATE",
+  "_TEMPLATE_NOTICE": "SYNTHETIC FIXTURE TEMPLATE -- NOT A REAL RESULT. Generated from hand-built synthetic rows, B reduced to 5 for template-generation speed only (frozen B=2000), to demonstrate the result schema before any real analysis is run."
+}
