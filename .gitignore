@@ -1,0 +1,22 @@
+# Corpus data is NEVER committed. Every file under data/ is either fetched
+# from an upstream source or generated locally by the build pipeline. See
+# data/README.md for exact provenance, licensing, and rebuild commands.
+#
+# Raw-data location convention: upstream clones and downloads live under
+# data/raw/<source-name>/ (e.g. data/raw/lineara_xyz/), NOT at the repo
+# root. Nothing under data/ other than README.md is ever committed.
+data/raw/
+data/generated/
+data/cache/
+data/*
+!data/README.md
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv/
+
+# OS noise
+.DS_Store
