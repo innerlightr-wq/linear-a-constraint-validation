@@ -33,7 +33,7 @@ element per word/numeral/separator/line-break, in original order), `words`
 | numeral representation | plain decimal-string tokens (e.g. `"197"`) inline in `transliteratedWords` | **AVAILABLE** |
 | fraction representation | a **separate, adjacent** array element carrying a Unicode fraction glyph (e.g. `"¹⁄₂"`) immediately following a whole-number token — composite values are split across two list positions, not one combined token | **DERIVABLE** — requires an adapter rule to detect and merge an adjacent recognized fraction-glyph token onto the preceding numeral (documented as Normalization Rule N2 below) |
 | fraction confidence grading (protocol §3: `secure`/`derived`/`open`) | **not present in this raw source at all** — no confidence/certainty field accompanies fraction tokens | **MISSING** from this source specifically. Per the external foundation project's own documented approach, confidence grading would need to be **derived from Corazza et al. (2021)'s published table as a separate, explicitly cited input**, not invented — this is additional work, out of scope for this ingestion-only phase, and is a real, honest data-adequacy gap, not silently patched |
-| section/line/ruling markers | `"\n"` appears as its own array element wherever the transcription breaks to a new physical line | **AMBIGUOUS** — see Normalization Rule N1 below; not confirmed identical to a GORILA-sense incised ruling |
+| section/line/ruling markers | `"\n"` appears as its own array element wherever the transcription breaks to a new physical line, but was found — via the first real-corpus run — to appear between every entry, not only at true section boundaries | **MISSING** (corrected from an earlier AMBIGUOUS classification once real data showed no reliable ruling signal exists in this source at all) — see Normalization Rule N1 below; Rule A correctly falls back to prior-total/start-of-tablet only |
 | word-internal separator | `"𐄁"` (U+10101), independently confirmed via `annotations.js`'s own per-word tag `"word separator"` | **AVAILABLE**, but is **not** a structural boundary in the protocol's sense — filtered out, not treated as content or as a ruling (Normalization Rule N3) |
 | damage/uncertainty representation | embedded **within** transliterated word strings as bracket characters, e.g. `TE+RO[` (attested, tablet HT104) — no separate structured boolean field found in `LinearAInscriptions.js` | **DERIVABLE** via string-pattern parsing (`[`, `]`, `?` and combinations), following the same documented convention the external foundation project's `build_corpus.py` uses (independently reimplemented, not copied). `annotations.js`'s tag vocabulary was not exhaustively inventoried in this pass and may offer a cleaner structured signal — **OPEN**, not relied upon |
 | site/archive field | `site` and `findspot` fields, directly present per tablet | **AVAILABLE** (bonus: `scribe` and `context`/period are also directly present, beyond what the protocol requires) |
@@ -52,14 +52,24 @@ element per word/numeral/separator/line-break, in original order), `words`
 
 **Yes**, in four specific, now-documented ways (the adapter, `src/lineara_adapter.py`, implements exactly these and no others):
 
-- **N1 — line breaks as sectioning boundaries.** `"\n"` tokens are mapped to
-  the protocol's `Token(kind="ruling")` slot, as the closest available proxy
-  for a structural boundary. **Caveat, stated plainly:** this is an
-  operational choice, not a confirmed equivalence — a transcription line
-  break is not guaranteed to coincide with a physical incised ruling in the
-  GORILA epigraphic sense. This is an implementation-level adapter decision
-  within the frozen protocol's existing `ruling` concept (§4), not a change
-  to the protocol itself.
+- **N1 — line breaks are dropped, NOT mapped to a ruling (corrected after
+  the first real-corpus run).** This rule originally mapped `"\n"` to the
+  protocol's `Token(kind="ruling")` slot, on the theory that it was the
+  closest available proxy for a structural boundary. **The first real-corpus
+  run showed this was wrong**, not merely uncertain: this source places a
+  `"\n"` between every entry, not only at genuine section boundaries, so
+  treating every line break as a ruling caused
+  `kuro_protocol.preceding_block`'s "stop at the first ruling scanning
+  backward" rule to empty every occurrence's preceding block immediately —
+  100% MISSING across all three targets, caught by the H1 protocol's own
+  §5 sanity check before any verdict was computed. **Corrected:** `"\n"` is
+  now dropped, exactly like the word separator (N3). This source does not
+  reliably encode a GORILA-sense physical ruling separable from ordinary
+  line-wrapping; Rule A therefore correctly reduces to its other two
+  boundary conditions (prior total / start of tablet) for this specific
+  source. This is a valid, unmodified instantiation of the frozen Rule A
+  definition (§4 already lists three alternative conditions) — no protocol
+  text changed, only this adapter's mapping of a raw signal onto it.
 - **N2 — adjacent fraction-glyph merging.** A recognized Unicode fraction
   glyph token immediately following a numeral token is merged into that
   numeral's `fractions` list, with `confidence` left **unset/absent** rather

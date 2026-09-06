@@ -46,11 +46,13 @@ class TestTabletIdExtraction:
 
 class TestTokenOrderPreservation:
     def test_order_preserved(self):
+        # "\n" is dropped (N1 correction, see TestRulingBoundaries) -- order
+        # of the remaining, non-dropped tokens must still be preserved.
         words = ["AGENT-ONE", "\n", "AGENT-TWO", "4", "\n", "KU-RO", "4"]
         r = la.raw_tablet_to_record(raw(words=words))
         kinds = [t.kind for t in r.tokens]
-        assert kinds == ["signgroup", "ruling", "signgroup", "numeral",
-                          "ruling", "signgroup", "numeral"]
+        assert kinds == ["signgroup", "signgroup", "numeral",
+                          "signgroup", "numeral"]
 
 
 class TestTargetNormalization:
@@ -141,19 +143,55 @@ class TestDamagePropagation:
 
 
 class TestRulingBoundaries:
-    def test_newline_becomes_ruling_token(self):
-        r = la.raw_tablet_to_record(raw(words=["A", "\n", "B"]))
-        assert r.tokens[1].kind == "ruling"
+    """N1 correction (see src/lineara_adapter.py module docstring): "\\n" is
+    dropped, not mapped to Token(kind="ruling") -- found wrong via the first
+    real-corpus run (every occurrence's preceding block was emptied, since
+    this source places "\\n" between every entry, not only at true section
+    boundaries). Fixed at the adapter level; the frozen protocol's Rule A
+    definition (ruling / prior-total / start-of-tablet) is unchanged -- this
+    source simply supplies no reliable ruling signal, so Rule A reduces to
+    its other two conditions for this source."""
 
-    def test_word_separator_is_dropped_not_ruling(self):
+    def test_newline_is_dropped_not_a_ruling_token(self):
+        r = la.raw_tablet_to_record(raw(words=["A", "\n", "B"]))
+        kinds = [t.kind for t in r.tokens]
+        assert kinds == ["signgroup", "signgroup"]
+
+    def test_word_separator_is_also_dropped(self):
         r = la.raw_tablet_to_record(raw(words=["A", "\U00010101", "B"]))
         kinds = [t.kind for t in r.tokens]
         assert kinds == ["signgroup", "signgroup"]
 
-    def test_consecutive_newlines_yield_consecutive_rulings(self):
+    def test_consecutive_newlines_all_dropped(self):
         r = la.raw_tablet_to_record(raw(words=["A", "\n", "\n", "B"]))
         kinds = [t.kind for t in r.tokens]
-        assert kinds == ["signgroup", "ruling", "ruling", "signgroup"]
+        assert kinds == ["signgroup", "signgroup"]
+
+    def test_no_ruling_token_kind_ever_produced_by_this_adapter(self):
+        # Locks in the correction: this adapter (for this source) never
+        # emits a ruling token at all -- Rule A relies on prior-total /
+        # start-of-tablet only, per kuro_protocol.preceding_block's other
+        # two boundary conditions.
+        r = la.raw_tablet_to_record(raw(words=["A", "\n", "B", "\n", "KU-RO", "5"]))
+        assert all(t.kind != "ruling" for t in r.tokens)
+
+    def test_regression_multiple_newline_separated_entries_reach_kuro(self):
+        # Reproduces the exact real-data pattern that exposed the bug
+        # (tablet HT104's shape: heading, then several "\n"-separated
+        # entries, then KU-RO): the preceding block must still reach back
+        # through every entry, not stop at the "\n" immediately before
+        # KU-RO.
+        from kuro_protocol import preceding_block, numeral_value
+        words = ["HEADING-WORD", "\n",
+                 "AGENT-A", "45", "\n",
+                 "AGENT-B", "20", "\n",
+                 "AGENT-C", "29", "\n",
+                 "KU-RO", "95"]
+        r = la.raw_tablet_to_record(raw(words=words))
+        kuro_idx = next(i for i, t in enumerate(r.tokens)
+                         if t.kind == "signgroup" and t.sign_ids == KURO_IDS)
+        block = preceding_block(r, kuro_idx, rule="A")
+        assert [numeral_value(t) for t in block] == [45.0, 20.0, 29.0]
 
 
 class TestMalformedRecords:

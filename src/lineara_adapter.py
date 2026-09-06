@@ -21,6 +21,22 @@ Implements exactly the four normalization rules declared in
 docs/SCHEMA_MAPPING.md (N1-N4) and no others. No semantic interpretation is
 introduced; `translatedWords` is never read by this module (it is dropped
 upstream, in src/extract_raw_js.js, per the same documented rationale).
+
+CORRECTION (found via the first real-corpus run, resolved as an
+implementation issue per H1_PROTOCOL.md's own sanity-check discipline, NOT
+by changing the frozen protocol): N1 originally mapped "\n" to
+Token(kind="ruling"). Real data showed this to be wrong: this source places
+a "\n" between EVERY entry, not only at genuine section boundaries, so
+treating every line break as a ruling caused kuro_protocol.preceding_block's
+"stop at the first ruling scanning backward" rule to empty every block
+immediately (the "\n" right before a target token was itself always the
+first thing found scanning backward). N1 is now: "\n" is dropped, exactly
+like the word separator (N3) -- this source does not reliably encode a
+GORILA-sense physical ruling distinguishable from ordinary line-wrapping, so
+Rule A correctly reduces to its other two boundary conditions (prior total /
+start of tablet) for this source. This is a valid, unmodified instantiation
+of the frozen Rule A definition (H1_PROTOCOL.md §4 already lists three
+alternative boundary conditions); no protocol text changed.
 """
 from __future__ import annotations
 
@@ -108,8 +124,7 @@ def raw_tablet_to_record(raw: dict, fallback_log: list | None = None) -> Record:
 
     for w in words:
         if w == LINE_BREAK:
-            tokens.append(Token(kind="ruling"))                      # N1
-            continue
+            continue                                                  # N1 (corrected, see below)
         if w == WORD_SEPARATOR:
             continue                                                  # N3
         if is_fraction_glyph(w):
