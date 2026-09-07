@@ -1,0 +1,179 @@
+{
+  "task2_examples": {
+    "A_huge_reduction_zero_information": {
+      "n1": 50,
+      "n0": 50,
+      "e1": 45,
+      "e0": 45,
+      "p": 0.5,
+      "p_prime": 0.5,
+      "r1": 0.9,
+      "r0": 0.9,
+      "cardinality_reduction_fraction": 0.9,
+      "information_gain": true
+    },
+    "B_tiny_reduction_large_information": {
+      "n1": 100,
+      "n0": 9900,
+      "e1": 99,
+      "e0": 0,
+      "p": 0.01,
+      "p_prime": 0.000100999899000101,
+      "r1": 0.99,
+      "r0": 0.0,
+      "cardinality_reduction_fraction": 0.0099,
+      "odds_ratio_p_to_pprime": 100.0
+    },
+    "C_progressive_no_accumulation": {
+      "stages": [
+        {
+          "stage": 0,
+          "n1": 50,
+          "n0": 50,
+          "n_total": 100,
+          "p": 0.5
+        },
+        {
+          "stage": 1,
+          "n1": 45,
+          "n0": 45,
+          "n_total": 90,
+          "p": 0.5
+        },
+        {
+          "stage": 2,
+          "n1": 40,
+          "n0": 40,
+          "n_total": 80,
+          "p": 0.5
+        },
+        {
+          "stage": 3,
+          "n1": 35,
+          "n0": 35,
+          "n_total": 70,
+          "p": 0.5
+        }
+      ],
+      "all_p_equal": true,
+      "cardinality_shrunk_every_stage": true
+    },
+    "D_progressive_accumulation": {
+      "stages": [
+        {
+          "stage": 0,
+          "n1": 50,
+          "n0": 50,
+          "n_total": 100,
+          "p": 0.5
+        },
+        {
+          "stage": 1,
+          "n1": 50,
+          "n0": 30,
+          "n_total": 80,
+          "p": 0.625
+        },
+        {
+          "stage": 2,
+          "n1": 50,
+          "n0": 20,
+          "n_total": 70,
+          "p": 0.7142857142857143
+        },
+        {
+          "stage": 3,
+          "n1": 50,
+          "n0": 10,
+          "n_total": 60,
+          "p": 0.8333333333333334
+        }
+      ],
+      "strictly_increasing": true
+    }
+  },
+  "task3_IX_positive_IY_zero": {
+    "I_C_Y_bits": 0.0,
+    "I_C_X_bits": 1.0,
+    "C_independent_of_Y": true,
+    "C_informative_about_X": true,
+    "(C,Y)_jointly_determine_X": true,
+    "data_processing_inequality_satisfied": true
+  },
+  "task5_8_sequential_null_then_informative": {
+    "p0": 0.5,
+    "stage1": {
+      "r1": 0.5,
+      "r0": 0.5,
+      "p_after": 0.5,
+      "informative": false
+    },
+    "stage2": {
+      "r1": 0.0,
+      "r0": 0.5,
+      "p_after": 0.6666666666666666,
+      "informative": true
+    },
+    "null_step_did_not_block_later_information": true
+  },
+  "task8_simpson_marginal_balanced_conditional_asymmetric": {
+    "stratum_A": {
+      "r1": 0.2,
+      "r0": 0.8,
+      "p_after": 0.8
+    },
+    "stratum_B": {
+      "r1": 0.8,
+      "r0": 0.2,
+      "p_after": 0.2
+    },
+    "pooled_marginal": {
+      "r1": 0.5,
+      "r0": 0.5,
+      "p_before": 0.5,
+      "p_after": 0.5
+    },
+    "marginal_appears_balanced": true,
+    "within_strata_are_strongly_asymmetric_and_reversed": true
+  },
+  "task8_confounded_proxy": {
+    "within_HT": {
+      "r1": 0.2,
+      "r0": 0.2,
+      "asymmetric": false
+    },
+    "within_OTHER": {
+      "r1": 0.8,
+      "r0": 0.8,
+      "asymmetric": false
+    },
+    "marginal_pooled": {
+      "r1": 0.32,
+      "r0": 0.56,
+      "asymmetric": true
+    },
+    "confound_produces_spurious_marginal_asymmetry": true
+  },
+  "task6_v1_v2_elimination_diagnostic": {
+    "V1_population": {
+      "n1": 38,
+      "n0": 198,
+      "p": 0.16101694915254236
+    },
+    "eliminated_going_to_V2": {
+      "e1": 17,
+      "e0": 0
+    },
+    "r1_r0": {
+      "r1": 0.4473684210526316,
+      "r0": 0.0
+    },
+    "V2_population_implied": {
+      "n1": 21,
+      "n0": 198,
+      "p": 0.0958904109589041
+    },
+    "extreme_asymmetry": true,
+    "note": "r1=17/38 (0.447) vs r0=0/198 (0.0) is the exact, already-disclosed asymmetry between V1's and V2's populations -- consistent with, and a direct numerical restatement of, why the NO_INTEGER_VALUE category behaved as a near-deterministic predictor of Y within V1's full population."
+  }
+}
