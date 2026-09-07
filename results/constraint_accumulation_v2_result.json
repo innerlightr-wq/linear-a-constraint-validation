@@ -1,36 +1,80 @@
 {
-  "status": "COMPLETE",
-  "n_splits": 5,
-  "seed": 1,
-  "B": 30,
-  "h_hat": {
-    "M0": 0.8965788780914682,
-    "M1": 0.9038157213190322,
-    "M2": 0.9237042143328528,
-    "M3": 0.9460164892731954,
-    "M4": 0.9792864526020832
+  "provenance": {
+    "protocol_freeze_sha": "931fd5905ec3c67f526b108452ec9c355c1b0048",
+    "harness_sha": "e48e01c67b5a5023c8824364b4be1d1b1a38f5d0",
+    "corpus_path": "data/generated/lineara_extracted.json",
+    "corpus_sha256": "219b52569cab75b58e95afb0a969689c6c50f753ce690321f20abbaff3a8eff8",
+    "seed": 20260906,
+    "B": 2000,
+    "timestamp_utc": "2026-09-07T00:38:29Z"
   },
-  "delta_h": {
-    "M1": -0.007236843227564016,
-    "M2": -0.019888493013820563,
-    "M3": -0.022312274940342602,
-    "M4": -0.033269963328887875
+  "population": {
+    "n_total": 219,
+    "n_tablets": 89,
+    "n_positive": 21,
+    "n_negative": 198,
+    "ht_fraction": 0.7168949771689498,
+    "site_counts": {
+      "Haghia Triada": 157,
+      "OTHER": 62
+    },
+    "support_counts": {
+      "Tablet": 214,
+      "OTHER": 5
+    },
+    "position_counts": {
+      "FIRST": 87,
+      "SECOND": 41,
+      "THIRD_OR_LATER": 91
+    },
+    "commodity_counts": {
+      "LIQUID": 114,
+      "DRY": 105
+    },
+    "whole_component_magnitude_range": [
+      1.0,
+      9.932214751968385
+    ]
   },
-  "raw_p": {
-    "M2": 0.6774193548387096,
-    "M3": 1.0,
-    "M4": 0.9354838709677419
+  "adequacy": {
+    "criterion_A_fold_class_presence": true,
+    "criterion_B_min_5_positive_per_training_fold": true,
+    "criterion_C_min_50pct_mixed_strata_M4": true,
+    "criterion_C_actual_fraction": 0.7142857142857143,
+    "criterion_D_coarse_screen": true,
+    "overall_adequacy": "PASS",
+    "n_splits_used": 5
   },
-  "holm_adjusted_p": {
-    "M2": 1.0,
-    "M3": 1.0,
-    "M4": 1.0
+  "model_performance_bits": {
+    "M0": 0.46109605742453724,
+    "M1": 0.46783158756596255,
+    "M2": 0.483787294749141,
+    "M3": 0.5007922143638497,
+    "M4": 0.5013642298796912
+  },
+  "increments_bits": {
+    "M1": -0.0067355301414253055,
+    "M2": -0.015955707183178458,
+    "M3": -0.01700491961470868,
+    "M4": -0.0005720155158415174
+  },
+  "inference": {
+    "raw_p": {
+      "M2": 0.9190404797601199,
+      "M3": 0.9855072463768116,
+      "M4": 0.21189405297351324
+    },
+    "holm_adjusted_p": {
+      "M2": 1.0,
+      "M3": 1.0,
+      "M4": 0.6356821589205397
+    },
+    "alpha": 0.05
   },
   "step_verdicts": {
     "M2": "NOT SUPPORTED",
     "M3": "NOT SUPPORTED",
     "M4": "NOT SUPPORTED"
   },
-  "broad_program_update": "NEGATIVE UPDATE",
-  "_TEMPLATE_NOTICE": "SYNTHETIC FIXTURE TEMPLATE -- NOT A REAL RESULT. Generated from hand-built synthetic rows with no real predictor-outcome relationship, B reduced to 30 for template-generation speed only (frozen B=2000), to demonstrate the V2 result schema before any real analysis is run."
+  "broad_program_update": "NEGATIVE UPDATE"
 }
