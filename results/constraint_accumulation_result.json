@@ -1,36 +1,103 @@
 {
-  "status": "COMPLETE",
-  "chosen_n_splits": 5,
-  "seed": 1,
-  "B": 5,
-  "h_hat": {
-    "M0": 1.0,
-    "M1": 1.0,
-    "M2": 1.0110538724927354,
-    "M3": 1.0111467405020504,
-    "M4": 1.0131090643634932
+  "provenance": {
+    "protocol_freeze_sha": "2f58a7c80c173f538c758596ce94aa353d1ca07c",
+    "harness_sha": "de3bc6159082c49ffce5adfcaa00e04ec4730be6",
+    "corpus_path": "data/generated/lineara_extracted.json",
+    "corpus_sha256": "219b52569cab75b58e95afb0a969689c6c50f753ce690321f20abbaff3a8eff8",
+    "seed": 20260906,
+    "B": 2000,
+    "timestamp_utc": "2026-09-06T23:55:01Z"
   },
-  "delta_h": {
-    "M1": 0.0,
-    "M2": -0.011053872492735373,
-    "M3": -9.286800931507244e-05,
-    "M4": -0.001962323861442794
+  "adequacy": {
+    "n_total": 236,
+    "n_tablets": 94,
+    "n_positive": 38,
+    "n_negative": 198,
+    "primary_adequacy_gate_pass": true,
+    "cv_folds_used": 5,
+    "site_counts": {
+      "Haghia Triada": 169,
+      "OTHER": 67
+    },
+    "support_counts": {
+      "Tablet": 231,
+      "OTHER": 5
+    },
+    "position_counts": {
+      "FIRST": 94,
+      "SECOND": 46,
+      "THIRD_OR_LATER": 96
+    },
+    "commodity_counts": {
+      "LIQUID": 125,
+      "DRY": 111
+    },
+    "category_adequacy": {
+      "site_block": {
+        "Haghia Triada": true,
+        "OTHER": true
+      },
+      "support_block": {
+        "Tablet": true,
+        "OTHER": false
+      },
+      "commodity_class": {
+        "LIQUID": true,
+        "DRY": true
+      },
+      "position_bucket": {
+        "FIRST": true,
+        "SECOND": true,
+        "THIRD_OR_LATER": true
+      },
+      "numeric_bin": {
+        "LARGE": true,
+        "SMALL": true,
+        "MEDIUM": true,
+        "NO_INTEGER_VALUE": true
+      }
+    },
+    "M2_evaluable": true,
+    "M3_evaluable": true,
+    "M4_evaluable": true
   },
-  "raw_p": {
-    "M2": 0.3333333333333333,
-    "M3": 0.16666666666666666,
-    "M4": 1.0
+  "model_performance_bits": {
+    "M0": 0.6506601296748461,
+    "M1": 0.672503734834011,
+    "M2": 0.6808266889731145,
+    "M3": 0.6928703948865771,
+    "M4": 0.516238415810636
   },
-  "holm_adjusted_p": {
-    "M2": 0.6666666666666666,
-    "M3": 0.5,
-    "M4": 1.0
+  "increments_bits": {
+    "M1": -0.021843605159164947,
+    "M2": -0.008322954139103445,
+    "M3": -0.012043705913462599,
+    "M4": 0.17663197907594108
+  },
+  "inference": {
+    "raw_p": {
+      "M2": 0.6541729135432284,
+      "M3": 0.9310344827586207,
+      "M4": 0.0004997501249375312
+    },
+    "holm_adjusted_p": {
+      "M2": 1.0,
+      "M3": 1.0,
+      "M4": 0.0014992503748125937
+    },
+    "alpha": 0.05
   },
   "step_verdicts": {
     "M2": "NOT SUPPORTED",
     "M3": "NOT SUPPORTED",
-    "M4": "NOT SUPPORTED"
+    "M4": "SUPPORTED"
   },
-  "broad_program_update": "NEGATIVE UPDATE",
-  "_TEMPLATE_NOTICE": "SYNTHETIC FIXTURE TEMPLATE -- NOT A REAL RESULT. Generated from hand-built synthetic rows, B reduced to 5 for template-generation speed only (frozen B=2000), to demonstrate the result schema before any real analysis is run."
+  "broad_program_update": "WEAK POSITIVE UPDATE",
+  "pre_result_implementation_interpretation": "Per-step category adequacy (docs/CONSTRAINT_ACCUMULATION_PROTOCOL.md \u00a711) is applied to the newly introduced block at each incremental step (position for M2, commodity for M3, numeric for M4); previously admitted blocks retain their prior evaluability status and are not re-checked at later steps. This is a disclosed, pre-result reading of an otherwise-underspecified scoping detail in the frozen protocol -- not a new hypothesis, and not altered after seeing results.",
+  "limitations": {
+    "ht_site_concentration": "Haghia Triada = 169/236 (71.6%) of usable rows; no cross-site generalization claim authorized.",
+    "artifact_dependence_sensitivity": "PENDING -- PREDECLARED BUT NOT YET IMPLEMENTED in the harness. Primary result stands under its frozen primary tablet-grouped design regardless.",
+    "m3_external_domain_dependence": "C_COMMODITY (LIQUID/DRY) is EXTERNAL DOMAIN MODEL INPUT (provisional Linear-B homology); M3 was NOT SUPPORTED in this run, consistent with Candidate 1's own marginal null finding.",
+    "m4_numeric_bin_circularity": "CRITICAL, DISCLOSED FINDING: the NO_INTEGER_VALUE category of C_NUMERIC is tautologically entangled with Y by construction of the underlying token representation -- a numeral token has numeric_value=None if and only if it was created via the fraction-only code path in src/lineara_adapter.py, which ALWAYS carries a non-empty .fractions list. Empirically, all 17/17 rows with numeric_value=None have fraction_present=True (100%), accounting for 17 of the 38 total positives (44.7%). Among the 219 rows WITH a resolvable integer value (excluding NO_INTEGER_VALUE), the marginal fraction-presence rate is roughly flat across bins (SMALL 10.8%, MEDIUM 11.1%, LARGE 6.8%) -- no clear magnitude gradient. M4's large, Holm-significant \u0394H4 is therefore very likely driven substantially, plausibly predominantly, by this structural artifact rather than a genuine 'quantity magnitude predicts fraction usage' relationship. This does NOT change the mechanically-computed, frozen-protocol verdict (M4: SUPPORTED) -- it is reported as the single most important interpretive caveat on that verdict, discovered via a purely descriptive post-hoc check, per this round's own adversarial-audit requirement. No rebinning, category merge, or protocol change was made in response."
+  }
 }
