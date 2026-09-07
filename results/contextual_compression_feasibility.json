@@ -1,0 +1,524 @@
+{
+  "corpus_path": "data/generated/lineara_extracted.json",
+  "n_records": 1721,
+  "field_availability": {
+    "inscription_id": {
+      "classification": "AVAILABLE",
+      "usable_n": 1721,
+      "basis": "`name` field, unique per record (verified: 0 duplicates)"
+    },
+    "site": {
+      "classification": "AVAILABLE",
+      "usable_n": 1718,
+      "basis": "`site` field, direct string"
+    },
+    "object_tablet_id": {
+      "classification": "AVAILABLE",
+      "usable_n": 1721,
+      "basis": "same as inscription_id -- this corpus has no separate record-vs-physical-object key (see physical_artifact_dependence)"
+    },
+    "archaeological_context_period": {
+      "classification": "PARTIAL",
+      "usable_n": 1390,
+      "basis": "`context` field is a CHRONOLOGICAL PERIOD label (e.g. 'LMIB'), not an archaeological FUNCTION/context classification (administrative/ritual/domestic/...). Present for the majority but heavily concentrated on one value (see categorical_distribution('context'))."
+    },
+    "administrative_ritual_classification": {
+      "classification": "NOT AVAILABLE",
+      "usable_n": 0,
+      "basis": "No field in this corpus encodes archaeological function/use-category. `support` (physical medium) and `findspot` (room/building label) are the closest proxies but neither is a function classification, and building either into one without independent literature would risk classifying by the very statistics under test (explicitly disallowed this round -- see Task 3)."
+    },
+    "building_room_context": {
+      "classification": "PARTIAL",
+      "usable_n": 1063,
+      "basis": "`findspot` gives a room/building-level free-text label (e.g. 'Portico 11 and Room 13') for a minority of records, concentrated on Haghia Triada; only 10 distinct values exist across the whole corpus."
+    },
+    "object_type": {
+      "classification": "AVAILABLE",
+      "usable_n": 1721,
+      "basis": "`support` field (physical medium/object type, e.g. 'Tablet', 'Nodule', 'Roundel'), present for every record with a non-null value."
+    },
+    "sign_sequence": {
+      "classification": "AVAILABLE",
+      "usable_n": 1706,
+      "basis": "`transliteratedWords`, order-preserving, filtered to signgroup tokens via the already-validated adapter predicates (no new parsing rule)."
+    },
+    "sign_count": {
+      "classification": "DERIVABLE",
+      "usable_n": 1721,
+      "basis": "len(signgroup tokens) per record -- directly computed, see sign_length_distribution."
+    },
+    "line_count": {
+      "classification": "PARTIAL",
+      "usable_n": 453,
+      "basis": "raw '\\n' markers exist in `transliteratedWords`, but docs/SCHEMA_MAPPING.md's own N1 correction found this source places '\\n' between EVERY entry, not only true physical line breaks -- so a '\\n' count is an ENTRY-count proxy, not a validated physical-line count. Usable only with this caveat disclosed, never as a clean line count."
+    },
+    "numerals": {
+      "classification": "AVAILABLE",
+      "usable_n": 349,
+      "basis": "plain decimal-string tokens, same extraction as H1/V1/V2."
+    },
+    "fractions": {
+      "classification": "DERIVABLE",
+      "usable_n": 121,
+      "basis": "Unicode fraction glyphs, same extraction as H1/V1/V2 (N2 merging rule); fraction CONFIDENCE grading remains MISSING from this source (unchanged from H1/V2 finding)."
+    },
+    "commodities": {
+      "classification": "EXTERNAL DATA REQUIRED",
+      "usable_n": 0,
+      "basis": "commodity-ideogram identity is not a labeled field; the prior round's LIQUID/DRY classification (docs/CONSTRAINT_SPACE_DATA_AUDIT.md, docs/LINEAR_A_NUMERICAL_METROLOGY_AUDIT.md) already required an EXTERNAL DOMAIN MODEL INPUT (Linear B homology); unchanged here, not recomputed."
+    },
+    "repeated_sign_groups": {
+      "classification": "PARTIAL",
+      "usable_n": 1706,
+      "basis": "computable CORPUS-WIDE (cross-record n-gram/sign-group frequency, exactly what H1's own occurrence counting already does) but the median per-record sign count is very low (see sign_length_distribution) -- WITHIN-record repetition structure is not meaningfully measurable for most individual inscriptions."
+    },
+    "findspot": {
+      "classification": "PARTIAL",
+      "usable_n": 1063,
+      "basis": "same field as building_room_context."
+    },
+    "coordinates": {
+      "classification": "NOT AVAILABLE",
+      "usable_n": 0,
+      "basis": "no latitude/longitude field or value exists anywhere in this corpus or in any file previously ingested by this project (confirmed by repo-wide search); would have to be attached externally, by site name, from a published gazetteer."
+    },
+    "elevation": {
+      "classification": "NOT AVAILABLE",
+      "usable_n": 0,
+      "basis": "same as coordinates -- no field exists; external attachment only, and elevation is not a substitute for the underlying terrain-cost/mobility model needed to interpret it (see Task 4 discussion)."
+    },
+    "chronology": {
+      "classification": "PARTIAL",
+      "usable_n": 1390,
+      "basis": "same field as archaeological_context_period -- reused here for its temporal-ordering sense, not its function sense. 11 distinct period labels, extremely unevenly distributed (see categorical_distribution('context'))."
+    },
+    "preservation_damaged_signs": {
+      "classification": "DERIVABLE",
+      "usable_n": 67,
+      "basis": "bracket/'?' characters embedded in transliterated strings, same convention as H1's adapter (is_damaged_string) -- undifferentiated between physical damage and disputed reading (unchanged, already-disclosed limitation)."
+    },
+    "physical_artifact_dependence": {
+      "classification": "PARTIAL",
+      "usable_n": 9,
+      "basis": "a minority of `name` values encode an explicit fragment join (e.g. 'HT123+124a', 'HT42+59'), meaning more than one physical fragment was combined into one record; the remaining majority cannot be checked for undisclosed joins/refits without external epigraphic literature -- see dependence_structure_audit."
+    },
+    "possible_scribal_attribution": {
+      "classification": "PARTIAL",
+      "usable_n": 592,
+      "basis": "`scribe` field, a curated attribution (not this project's own inference), present for a minority of records, always nested within exactly one site (see nesting_check)."
+    }
+  },
+  "distributions": {
+    "site": {
+      "field": "site",
+      "n_total": 1721,
+      "n_non_null": 1718,
+      "n_missing": 3,
+      "n_unique": 52,
+      "counts": {
+        "Haghia Triada": 1110,
+        "Khania": 226,
+        "Phaistos": 66,
+        "Knossos": 59,
+        "Zakros": 53,
+        "Palaikastro": 25,
+        "Malia": 22,
+        "Thera": 18,
+        "Iouktas": 16,
+        "Arkhalkhori": 15,
+        "Petras": 12,
+        "Syme": 12,
+        "Kea": 8,
+        "Tylissos": 6,
+        "Gournia": 5,
+        "Miletos": 4,
+        "Pyrgos": 4,
+        "Crete": 4,
+        "Milos": 3,
+        "Mokhilos": 3,
+        "Mycenae": 3,
+        "Psykhro": 3,
+        "Vrysinas": 3,
+        "Apodoulou": 3,
+        "Kophinas": 2,
+        "Kythera": 2,
+        "Larani": 2,
+        "Poros Herakleiou": 2,
+        "Samothrace": 2,
+        "Troy": 2,
+        "Zominthos": 2,
+        "Kardamoutsa": 1,
+        "Kamilari": 1,
+        "Kannia": 1,
+        "Margiana": 1,
+        "Nerokurou": 1,
+        "Papourou": 1,
+        "Platanos": 1,
+        "Prassa": 1,
+        "Selakanos": 1,
+        "Sitia": 1,
+        "Skhinia": 1,
+        "Skoteino Cave": 1,
+        "Tel Haror": 1,
+        "Tiryns": 1,
+        "Troullos": 1,
+        "Traostalos": 1,
+        "Trypiti": 1,
+        "Armenoi": 1,
+        "Fourni": 1,
+        "Haghios Stehanos": 1,
+        "Kalo Chorafi": 1
+      }
+    },
+    "support": {
+      "field": "support",
+      "n_total": 1721,
+      "n_non_null": 1721,
+      "n_missing": 0,
+      "n_unique": 19,
+      "counts": {
+        "Nodule": 890,
+        "Tablet": 435,
+        "Roundel": 151,
+        "Clay vessel": 77,
+        "Stone vessel": 60,
+        "Metal object": 23,
+        "Stone object": 19,
+        "Lames (short thin tablet)": 18,
+        "Sealing": 12,
+        "Inked inscription": 9,
+        "Architecture": 6,
+        "3-sided bar": 5,
+        "4-sided bar": 5,
+        "Graffito": 3,
+        "ivory object": 3,
+        "clay vessel": 2,
+        "Label": 1,
+        "Loom weight": 1,
+        "Triton": 1
+      }
+    },
+    "context": {
+      "field": "context",
+      "n_total": 1721,
+      "n_non_null": 1390,
+      "n_missing": 331,
+      "n_unique": 11,
+      "counts": {
+        "LMIB": 1310,
+        "MMII": 27,
+        "LMIA": 20,
+        "LMI": 10,
+        "MMIII": 8,
+        "MMIIIB": 7,
+        "LMIIIA": 4,
+        "Geometric": 1,
+        "LBI": 1,
+        "MMIIIA": 1,
+        "MMIA": 1
+      }
+    },
+    "findspot": {
+      "field": "findspot",
+      "n_total": 1721,
+      "n_non_null": 1063,
+      "n_missing": 658,
+      "n_unique": 10,
+      "counts": {
+        "Portico 11 and Room 13": 863,
+        "Villa Magazine": 96,
+        "Casa Room 7": 42,
+        "Casa del Lebete": 38,
+        "Casa Room 9": 16,
+        "Corridor 9 and Vestibule 26": 2,
+        "Villa Magazine Room 5": 2,
+        "Malia Palace Room III 8": 2,
+        "Bastion E": 1,
+        "Malia South NW Corridor": 1
+      }
+    },
+    "scribe": {
+      "field": "scribe",
+      "n_total": 1721,
+      "n_non_null": 592,
+      "n_missing": 1129,
+      "n_unique": 102,
+      "counts": {
+        "HT Wa Scribe 10": 106,
+        "HT Wa Scribe 84": 41,
+        "HT Wa Scribe 68": 40,
+        "KH Scribe 1": 28,
+        "HT Scribe 9": 17,
+        "HT Wa Scribe 63": 17,
+        "HT Wa Scribe 90": 16,
+        "HT Wa Scribe 87": 14,
+        "ZA Scribe 1": 13,
+        "HT Wa Scribe 89": 12,
+        "HT Scribe 2": 10,
+        "HT Wa Scribe 69": 10,
+        "KH Scribe 2": 10,
+        "HT Scribe 14": 9,
+        "HT Wa Scribe 98": 9,
+        "HT Scribe 8": 8,
+        "HT Wa Scribe 71": 8,
+        "HT Wa Scribe 76": 7,
+        "HT Scribe 5": 6,
+        "HT Wc Scribe 10": 6,
+        "KH Wc Scribe 54": 6,
+        "HT Scribe 11": 5,
+        "HT Scribe 3": 5,
+        "HT Scribe 6": 5,
+        "HT Wa Scribe 85": 5,
+        "HT Wa Scribe 92": 5,
+        "HT Wa Scribe 93": 5,
+        "H Wc Scribe 54": 5,
+        "ARKH Scribe 1": 5,
+        "HT Scribe 1": 4,
+        "HT Scribe 23": 4,
+        "HT Scribe 7": 4,
+        "HT Wa Scribe 50": 4,
+        "HT Wa Scribe 53": 4,
+        "HT Wa Scribe 97": 4,
+        "HT Wc Scribe 11": 4,
+        "KH Wc Scribe 60": 4,
+        "KH Wc Scribe 55": 4,
+        "ZA Scribe 2": 4,
+        "HT Scribe 21": 3,
+        "HT Scribe 24": 3,
+        "HT Scribe 13": 3,
+        "HT Scribe 4": 3,
+        "HT Wa Scribe 52": 3,
+        "HT Wa Scribe 54": 3,
+        "HT Wa Scribe 59": 3,
+        "HT Wa Scribe 86": 3,
+        "KH Wa Scribe 50": 3,
+        "KH Wc Scribe 59": 3,
+        "ZA Scribe 4": 3,
+        "ZA Scribe 3": 3,
+        "HT Scribe 10": 2,
+        "HT Scribe 18": 2,
+        "HT Scribe 22": 2,
+        "HT Scribe 12": 2,
+        "HT Scribe 15": 2,
+        "HT Scribe 19": 2,
+        "HT Wa Scribe 51": 2,
+        "HT Wa Scribe 55": 2,
+        "HT Wa Scribe 57": 2,
+        "HT Wa Scribe 58": 2,
+        "HT Wa Scribe 60": 2,
+        "HT Wa Scribe 61": 2,
+        "HT Wa Scribe 62": 2,
+        "HT Wa Scribe 65": 2,
+        "HT Wa Scribe 70": 2,
+        "HT Wa Scribe 74": 2,
+        "HT Wa Scribe 79": 2,
+        "HT Wa Scribe 80": 2,
+        "HT Wa Scribe 81": 2,
+        "HT Wa Scribe 83": 2,
+        "HT Wa Scribe 77": 2,
+        "HT Wa Scribe 88": 2,
+        "HT Wa Scribe 91": 2,
+        "HT Wa Scribe 99": 2,
+        "KH Scribe 3": 2,
+        "KH Scribe 4": 2,
+        "KH Wa Scribe 51": 2,
+        "KH Wc Scribe 53": 2,
+        "KH Wc Scribe 56": 2,
+        "KH Wc Scribe 57": 2,
+        "KH Wc Scribe 58": 2,
+        "ZA Scribe 5": 2,
+        "HT Scribe 20": 1,
+        "HT Wa Scribe 34": 1,
+        "HT Wa Scribe 56": 1,
+        "HT Wa Scribe 64": 1,
+        "HT Wa Scribe 66": 1,
+        "HT Wa Scribe 67": 1,
+        "HT Wa Scribe 72": 1,
+        "HT Wa Scribe 73": 1,
+        "HT Wa Scribe 75": 1,
+        "HT Wa Scribe 78": 1,
+        "HT Wa Scribe 82": 1,
+        "HT Wa Scribe 94": 1,
+        "HT Wa Scribe 96": 1,
+        "KH Scribe 5": 1,
+        "KH Scribe 6": 1,
+        "KH Wa Scribe 52": 1,
+        "PS Scribe 1": 1,
+        "AR Scribe 1": 1,
+        "AR Scribe 2": 1
+      }
+    }
+  },
+  "nesting": {
+    "scribe_within_site": {
+      "child_field": "scribe",
+      "parent_field": "site",
+      "n_child_values": 102,
+      "perfectly_nested": true,
+      "n_violations": 0,
+      "violations": {}
+    },
+    "findspot_within_site": {
+      "child_field": "findspot",
+      "parent_field": "site",
+      "n_child_values": 10,
+      "perfectly_nested": true,
+      "n_violations": 0,
+      "violations": {}
+    }
+  },
+  "sign_length_distribution": {
+    "n": 1721,
+    "sign_count": {
+      "min": 0,
+      "max": 28,
+      "mean": 2.5735037768739106,
+      "median": 1,
+      "n_zero": 15,
+      "n_le_2": 1298,
+      "n_ge_10": 94
+    },
+    "distinct_sign_count": {
+      "min": 0,
+      "max": 21,
+      "mean": 2.294015107495642,
+      "median": 1
+    }
+  },
+  "site_concentration": {
+    "n_sites": 52,
+    "n_records_with_site": 1718,
+    "top_site": [
+      "Haghia Triada",
+      1110
+    ],
+    "top_site_share": 0.6461001164144354,
+    "herfindahl_index": 0.4391968352620545,
+    "n_sites_with_ge_5": 15,
+    "n_sites_with_ge_10": 12,
+    "n_sites_with_ge_30": 5,
+    "counts": {
+      "Haghia Triada": 1110,
+      "Khania": 226,
+      "Phaistos": 66,
+      "Knossos": 59,
+      "Zakros": 53,
+      "Palaikastro": 25,
+      "Malia": 22,
+      "Thera": 18,
+      "Iouktas": 16,
+      "Arkhalkhori": 15,
+      "Petras": 12,
+      "Syme": 12,
+      "Kea": 8,
+      "Tylissos": 6,
+      "Gournia": 5,
+      "Miletos": 4,
+      "Pyrgos": 4,
+      "Crete": 4,
+      "Milos": 3,
+      "Mokhilos": 3,
+      "Mycenae": 3,
+      "Psykhro": 3,
+      "Vrysinas": 3,
+      "Apodoulou": 3,
+      "Kophinas": 2,
+      "Kythera": 2,
+      "Larani": 2,
+      "Poros Herakleiou": 2,
+      "Samothrace": 2,
+      "Troy": 2,
+      "Zominthos": 2,
+      "Kardamoutsa": 1,
+      "Kamilari": 1,
+      "Kannia": 1,
+      "Margiana": 1,
+      "Nerokurou": 1,
+      "Papourou": 1,
+      "Platanos": 1,
+      "Prassa": 1,
+      "Selakanos": 1,
+      "Sitia": 1,
+      "Skhinia": 1,
+      "Skoteino Cave": 1,
+      "Tel Haror": 1,
+      "Tiryns": 1,
+      "Troullos": 1,
+      "Traostalos": 1,
+      "Trypiti": 1,
+      "Armenoi": 1,
+      "Fourni": 1,
+      "Haghios Stehanos": 1,
+      "Kalo Chorafi": 1
+    }
+  },
+  "fragment_joins": [
+    "HT123+124a",
+    "HT123+124b",
+    "HT42+59",
+    "HT62+73",
+    "HT79+83",
+    "HTWa1845+1733",
+    "HTZd157+156",
+    "KH68+71",
+    "KH79+89"
+  ],
+  "confound_diagnostics": {
+    "support_x_site": {
+      "field_a": "support",
+      "field_b": "site",
+      "n_pairs": 1718,
+      "I_bits": 0.9232332419291318,
+      "H_a_bits": 2.1183660183665007,
+      "H_b_bits": 2.212380602753825,
+      "normalized_I": 0.435823287347221,
+      "n_unique_a": 19,
+      "n_unique_b": 52
+    },
+    "scribe_x_support": {
+      "field_a": "scribe",
+      "field_b": "support",
+      "n_pairs": 592,
+      "I_bits": 1.2326994824191262,
+      "H_a_bits": 5.5058430446773,
+      "H_b_bits": 1.2568782619749121,
+      "normalized_I": 0.980762830985879,
+      "n_unique_a": 102,
+      "n_unique_b": 5
+    },
+    "context_x_site": {
+      "field_a": "context",
+      "field_b": "site",
+      "n_pairs": 1390,
+      "I_bits": 0.3872909163565212,
+      "H_a_bits": 0.4659042566929257,
+      "H_b_bits": 1.1711780413144008,
+      "normalized_I": 0.831267177307165,
+      "n_unique_a": 11,
+      "n_unique_b": 24
+    }
+  },
+  "ngram_feasibility": {
+    "unigram": {
+      "n": 1,
+      "total_ngram_occurrences": 4429,
+      "n_distinct_ngrams": 1313,
+      "n_hapax": 971,
+      "hapax_fraction": 0.7395277989337395
+    },
+    "bigram": {
+      "n": 2,
+      "total_ngram_occurrences": 2723,
+      "n_distinct_ngrams": 2257,
+      "n_hapax": 2075,
+      "hapax_fraction": 0.9193619849357554
+    },
+    "trigram": {
+      "n": 3,
+      "total_ngram_occurrences": 2200,
+      "n_distinct_ngrams": 2129,
+      "n_hapax": 2086,
+      "hapax_fraction": 0.9798027242837013
+    }
+  }
+}
