@@ -115,6 +115,12 @@ This project is scientifically independent: its code, protocols, and corpus
 construction are written fresh, and its results are reported regardless of
 whether they agree with the original paper.
 
+**Associated publication:**
+
+> De Jesús, Elias. (2026). *Structural Invariants in Linear A
+> Administrative Records: A Corridor-Based Framework for Semantic
+> Constraint.* Zenodo. https://doi.org/10.5281/zenodo.21793515
+
 This project also builds on, and explicitly credits, prior independent work
 on Linear A corpus validation — see `docs/EXTERNAL_FOUNDATION_AUDIT.md` for
 the full account of what was reused (ideas/protocol only, not code) and what
@@ -150,6 +156,28 @@ match before any result is reproduced from it.
 
 ## License
 
-To be finalized before any public release. Code in this repository will not
-redistribute any third-party corpus data (see `data/README.md`); the license
-covering original code and analysis here has not yet been chosen.
+This repository uses a dual-license structure for its own, original
+material:
+
+- **Software:** original software code authored for this repository
+  (`src/`, `tests/`, and other original executable scripts) is licensed
+  under the **MIT License** — see `LICENSE-MIT`.
+- **Research documentation and original computational results:**
+  original research documentation, methodological protocols,
+  computational-result reports, and other scholarly material authored for
+  this repository (`docs/`, `results/`, this README) is licensed under
+  **Creative Commons Attribution 4.0 International (CC BY 4.0)** — see
+  `LICENSE-CC-BY-4.0`.
+- **Third-party materials:** neither license applies to third-party
+  datasets, databases, corpus material, external software, source
+  material, images, or other externally authored content used or
+  referenced by this repository (see `data/README.md`). Those materials
+  remain subject to their own original copyrights, licenses, and terms of
+  use; this repository does not claim to relicense them.
+
+If citing this repository's original research material, please cite the
+associated publication:
+
+> De Jesús, Elias. (2026). *Structural Invariants in Linear A
+> Administrative Records: A Corridor-Based Framework for Semantic
+> Constraint.* Zenodo. https://doi.org/10.5281/zenodo.21793515
